@@ -13,9 +13,7 @@ class ActionLogObserver
 
     public function created(Model $model)
     {
-        $watching = $this->watchingAttributes($model);
-
-        $newData = Arr::only($model->getChanges(), $watching);
+        $newData = $model->getAttributes();
         $oldData = null;
 
         $model->actionLogs()->save($this->makeInstance($oldData, $newData, ActionLog::CREATE));
@@ -26,27 +24,34 @@ class ActionLogObserver
         $watching = $this->watchingAttributes($model);
 
         $newData = Arr::only($model->getChanges(), $watching);
-        $oldData = Arr::only($model->getOriginal(), $watching);
 
-        $model->actionLogs()->save($this->makeInstance($oldData, $newData, ActionLog::UPDATE));
+        if (empty($newData)) {
+            $oldData = Arr::only($model->getOriginal(), array_keys($newData));
+            $model->actionLogs()->save($this->makeInstance($oldData, $newData, ActionLog::UPDATE));
+        }
     }
 
+    /**
+     * @param Model $model
+     */
     public function deleted(Model $model)
     {
-        $watching = $this->watchingAttributes($model);
-
         $newData = null;
-        $oldData = Arr::only($model->getOriginal(), $watching);
+        $oldData = $model->getOriginal();
 
         $model->actionLogs()->save($this->makeInstance($oldData, $newData, ActionLog::DELETE));
     }
 
+    /**
+     * @param Model $model
+     * @return array
+     */
     protected function watchingAttributes(Model $model)
     {
 
         $excepts = $model->getExcepts();
 
-        return Arr::except(array_keys($model->getAttributes()), $excepts);
+        return array_diff(array_keys($model->getAttributes()), $excepts);
     }
 
     protected function makeInstance($oldData, $newData, $type)

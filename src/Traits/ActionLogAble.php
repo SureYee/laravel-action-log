@@ -13,7 +13,7 @@ trait ActionLogAble
         return $this->morphMany(ActionLog::class, 'model');
     }
 
-    public function excepts()
+    public function getExcepts()
     {
         return $this->excepts;
     }
