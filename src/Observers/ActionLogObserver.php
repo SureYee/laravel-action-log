@@ -11,6 +11,10 @@ use Sureyee\ActionLog\Models\ActionLog;
 class ActionLogObserver
 {
 
+    /**
+     * @param Model $model
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function created(Model $model)
     {
         $newData = $model->getAttributes();
@@ -19,6 +23,10 @@ class ActionLogObserver
         $model->actionLogs()->save($this->makeInstance($oldData, $newData, ActionLog::CREATE));
     }
 
+    /**
+     * @param Model $model
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updated(Model $model)
     {
         $watching = $this->watchingAttributes($model);
@@ -33,6 +41,7 @@ class ActionLogObserver
 
     /**
      * @param Model $model
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function deleted(Model $model)
     {
@@ -54,6 +63,13 @@ class ActionLogObserver
         return array_diff(array_keys($model->getAttributes()), $excepts);
     }
 
+    /**
+     * @param $oldData
+     * @param $newData
+     * @param $type
+     * @return mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     protected function makeInstance($oldData, $newData, $type)
     {
         $actionLog = app()->make(ActionLog::class);
