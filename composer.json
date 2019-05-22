@@ -1,0 +1,31 @@
+{
+  "name": "sureyee/laravel-action-log",
+  "description": "基于ORM模型事件的操作记录",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "yixu",
+      "email": "yixu@sureyee.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "laravel/framework": "^5.5|^5.6|^5.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sureyee\\ActionLog\\" : "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers" : [
+        "Sureyee\\ActionLog\\ActionLogServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
