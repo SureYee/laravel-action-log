@@ -33,7 +33,7 @@ class ActionLogObserver
 
         $newData = Arr::only($model->getChanges(), $watching);
 
-        if (empty($newData)) {
+        if (!empty($newData)) {
             $oldData = Arr::only($model->getOriginal(), array_keys($newData));
             $model->actionLogs()->save($this->makeInstance($oldData, $newData, ActionLog::UPDATE));
         }
