@@ -7,7 +7,6 @@ use Sureyee\ActionLog\Models\ActionLog;
 
 trait ActionLogAble
 {
-    protected $excepts = ['updated_at', 'created_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -22,6 +21,6 @@ trait ActionLogAble
      */
     public function getExcepts()
     {
-        return $this->excepts;
+        return $this->excepts ?? ['created_at', 'updated_at', 'deleted_at'];
     }
 }
